@@ -1,23 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
-
-import {
-  fetchIssueActivity,
-  fetchRepoContributors,
-} from './services/github.js';
+import { useMemo, useState } from "react";
+import { Button } from "@heroui/react";
 import {
   getBookmarkedRepositories,
   toggleRepositoryBookmark,
-} from './services/bookmarks.js';
+} from "./services/bookmarks.js";
 
-import SearchPanel from './components/SearchPanel.jsx';
-import BookmarksPanel from './components/BookmarksPanel.jsx';
-import IssuesTab from './components/IssuesTab.jsx';
-import AnalyticsTab from './components/AnalyticsTab.jsx';
-import RepoHeader from './components/RepoHeader.jsx';
-import { useRepoSearch } from './hooks/useRepoSearch.js';
-import { useRepoIssues } from './hooks/useRepoIssues.js';
+import SearchPanel from "./components/SearchPanel.jsx";
+import BookmarksPanel from "./components/BookmarksPanel.jsx";
+import IssuesTab from "./components/IssuesTab.jsx";
+import AnalyticsTab from "./components/AnalyticsTab.jsx";
+import RepoHeader from "./components/RepoHeader.jsx";
+import { useRepoSearch } from "./hooks/useRepoSearch.js";
+import { useRepoIssues } from "./hooks/useRepoIssues.js";
+import { useRepoAnalytics } from "./hooks/useRepoAnalytics.js";
 
-const ISSUE_PAGE_SIZE = 10;
+export const ISSUE_PAGE_SIZE = 10;
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString();
@@ -27,7 +24,7 @@ function App() {
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [bookmarks, setBookmarks] = useState(getBookmarkedRepositories());
 
-  const [activeTab, setActiveTab] = useState('issues');
+  const [activeTab, setActiveTab] = useState("issues");
 
   const {
     issueState,
@@ -40,11 +37,6 @@ function App() {
     error: issuesError,
   } = useRepoIssues(selectedRepo);
 
-  const [contributors, setContributors] = useState([]);
-  const [issueActivity, setIssueActivity] = useState([]);
-
-  const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
-  const [analyticsError, setAnalyticsError] = useState('');
   const {
     query,
     setQuery,
@@ -54,34 +46,8 @@ function App() {
     selectRepositoryFromSearch,
   } = useRepoSearch();
 
-  useEffect(() => {
-    if (!selectedRepo || activeTab !== 'analytics') {
-      return;
-    }
-
-    const loadAnalytics = async () => {
-      try {
-        setIsLoadingAnalytics(true);
-        setAnalyticsError('');
-        const [activity, topContributors] = await Promise.all([
-          fetchIssueActivity(selectedRepo.full_name),
-          fetchRepoContributors(selectedRepo.full_name),
-        ]);
-        setIssueActivity(activity);
-        setContributors(topContributors);
-      } catch (analyticsError) {
-        setAnalyticsError(
-          analyticsError instanceof Error
-            ? analyticsError.message
-            : 'Failed to load analytics.'
-        );
-      } finally {
-        setIsLoadingAnalytics(false);
-      }
-    };
-
-    loadAnalytics();
-  }, [selectedRepo, activeTab]);
+  const { isLoadingAnalytics, issueActivity, contributors, analyticsError } =
+    useRepoAnalytics(selectedRepo, activeTab);
 
   const isBookmarked = useMemo(() => {
     if (!selectedRepo) {
@@ -91,7 +57,7 @@ function App() {
   }, [selectedRepo, bookmarks]);
 
   const error =
-    activeTab === 'analytics'
+    activeTab === "analytics"
       ? analyticsError || searchError
       : issuesError || searchError;
 
@@ -101,7 +67,7 @@ function App() {
     setSelectedRepo(repo);
     selectRepositoryFromSearch(repo.full_name);
     setIssuePage(1);
-    setActiveTab('issues');
+    setActiveTab("issues");
   }
 
   function handleToggleBookmark() {
@@ -145,37 +111,37 @@ function App() {
           />
 
           <div className="tabs-row">
-            <button
+            <Button
               type="button"
-              className={activeTab === 'issues' ? 'tab active' : 'tab'}
-              onClick={() => setActiveTab('issues')}
+              {...(activeTab === "issues" ? {} : { variant: "secondary" })}
+              onClick={() => setActiveTab("issues")}
             >
               Issues
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className={activeTab === 'analytics' ? 'tab active' : 'tab'}
-              onClick={() => setActiveTab('analytics')}
+              {...(activeTab === "analytics" ? {} : { variant: "secondary" })}
+              onClick={() => setActiveTab("analytics")}
             >
               Analytics
-            </button>
+            </Button>
           </div>
 
-          {activeTab === 'issues' && (
+          {activeTab === "issues" && (
             <IssuesTab
-              activeTab={activeTab}
               issueState={issueState}
               setIssueState={setIssueState}
               issuePage={issuePage}
               setIssuePage={setIssuePage}
               issues={issues}
+              issueTotalCount={issueTotalCount}
               isLoadingIssues={isLoadingIssues}
               pageCount={pageCount}
               formatDate={formatDate}
             />
           )}
 
-          {activeTab === 'analytics' && (
+          {activeTab === "analytics" && (
             <AnalyticsTab
               isLoadingAnalytics={isLoadingAnalytics}
               issueActivity={issueActivity}

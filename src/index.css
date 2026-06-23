@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap");
 
-@import 'tailwindcss';
-@import '@heroui/styles';
+@import "tailwindcss";
+@import "@heroui/styles";
 :root {
   --bg: #f7f7f2;
   --card: #ffffff;
   --text-main: #1a1a18;
   --text-soft: #4d4d45;
-  --accent: #0f766e;
+  --accent: #1692bc;
   --accent-strong: #115e59;
   --line: #d7d7cc;
   --danger: #c81e1e;
@@ -20,7 +20,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   color: var(--text-main);
   background:
     radial-gradient(circle at 15% 12%, #efe9b7 0%, transparent 34%),
@@ -31,7 +31,7 @@ h1,
 h2,
 h3 {
   margin: 0;
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
 }
 
 .app-shell {
@@ -151,27 +151,10 @@ select {
   color: var(--text-soft);
 }
 
-.bookmark-btn,
-.tab,
-.pagination-row button {
-  border: 0;
-  border-radius: 999px;
-  background: #e6f4f1;
-  color: var(--accent-strong);
-  font: inherit;
-  padding: 0.55rem 0.95rem;
-  cursor: pointer;
-}
-
 .tabs-row {
   margin: 1rem 0;
   display: flex;
   gap: 0.55rem;
-}
-
-.tab.active {
-  background: var(--accent);
-  color: #fff;
 }
 
 .toolbar {
@@ -209,37 +192,6 @@ select {
   color: var(--text-soft);
   align-items: center;
   flex-wrap: wrap;
-}
-
-.state-pill {
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-}
-
-.state-pill.open {
-  background: #d8f7e7;
-  color: #146c43;
-}
-
-.state-pill.closed {
-  background: #ffe1e1;
-  color: #a61717;
-}
-
-.pagination-row {
-  margin-top: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.pagination-row button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .analytics-grid {

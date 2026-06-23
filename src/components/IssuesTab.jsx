@@ -1,32 +1,57 @@
-import { SkeletonLoader } from './SkeletonLoader.jsx';
-
+import { SkeletonLoader } from "./SkeletonLoader.jsx";
+import { Chip, Button } from "@heroui/react";
+import { Select, Label, ListBox } from "@heroui/react";
+import { Pagination } from "@heroui/react";
+import { ISSUE_PAGE_SIZE } from "../App.jsx";
 export default function IssuesTab({
-  activeTab,
   issueState,
   setIssueState,
   issuePage,
   setIssuePage,
   issues,
+  issueTotalCount,
   isLoadingIssues,
   pageCount,
   formatDate,
 }) {
+  const startItem =
+    issues.length === 0 ? 0 : (issuePage - 1) * ISSUE_PAGE_SIZE + 1;
+  const endItem = issues.length === 0 ? 0 : startItem + issues.length - 1;
+
   return (
     <div>
       <div className="toolbar">
-        <label htmlFor="issue-state">Status:</label>
-        <select
-          id="issue-state"
+        <Select
           value={issueState}
+          className="w-[256px]"
+          placeholder="Select one"
           onChange={(event) => {
-            setIssueState(event.target.value);
+            setIssueState(event);
             setIssuePage(1);
           }}
         >
-          <option value="open">Open</option>
-          <option value="closed">Closed</option>
-          <option value="all">All</option>
-        </select>
+          <Label>Status:</Label>
+          <Select.Trigger>
+            <Select.Value />
+            <Select.Indicator />
+          </Select.Trigger>
+          <Select.Popover>
+            <ListBox>
+              <ListBox.Item id="open" textValue="Open">
+                Open
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+              <ListBox.Item id="closed" textValue="Closed">
+                Closed
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+              <ListBox.Item id="all" textValue="All">
+                All
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+            </ListBox>
+          </Select.Popover>
+        </Select>
       </div>
 
       {isLoadingIssues && <SkeletonLoader />}
@@ -45,34 +70,39 @@ export default function IssuesTab({
               <div>
                 <span>#{issue.number}</span>
                 <span>{formatDate(issue.created_at)}</span>
-                <span className={`state-pill ${issue.state}`}>
-                  {issue.state}
-                </span>
+                <Chip color={issue.state === "open" ? "success" : "danger"}>
+                  {issue.state === "open" ? "Open" : "Closed"}
+                </Chip>
               </div>
             </li>
           ))}
         </ul>
       )}
-
-      <div className="pagination-row">
-        <button
-          type="button"
-          onClick={() => setIssuePage((prev) => Math.max(1, prev - 1))}
-          disabled={issuePage === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {issuePage} of {pageCount}
-        </span>
-        <button
-          type="button"
-          onClick={() => setIssuePage((prev) => Math.min(pageCount, prev + 1))}
-          disabled={issuePage >= pageCount}
-        >
-          Next
-        </button>
-      </div>
+      <Pagination className="w-full py-4 flex items-center justify-between">
+        <Pagination.Summary>
+          {startItem} to {endItem} of {issueTotalCount} issues
+        </Pagination.Summary>
+        <Pagination.Content>
+          <Pagination.Item>
+            <Pagination.Previous
+              isDisabled={issuePage === 1}
+              onPress={() => setIssuePage((p) => p - 1)}
+            >
+              <Pagination.PreviousIcon />
+              <span>Prev</span>
+            </Pagination.Previous>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Next
+              isDisabled={issuePage === pageCount}
+              onPress={() => setIssuePage((p) => p + 1)}
+            >
+              <span>Next</span>
+              <Pagination.NextIcon />
+            </Pagination.Next>
+          </Pagination.Item>
+        </Pagination.Content>
+      </Pagination>
     </div>
   );
 }
