@@ -1,6 +1,14 @@
 # Issue Radar
 
-Issue Radar is a React + Vite app for discovering GitHub repositories and tracking issue activity in one place.
+Issue Radar is a frontend application for exploring open-source repositories and tracking issue health through a clean, data-focused interface.
+
+## Live Website
+
+https://headinclouds.github.io/issue-radar/
+
+## Project Overview
+
+This project was built to demonstrate practical product thinking and frontend engineering skills: search experience design, asynchronous data handling, information architecture, and readable analytics presentation.
 
 ## Features
 
@@ -46,36 +54,6 @@ Open the local URL shown in the terminal (usually `http://localhost:5173`).
 - `npm run build` - Create a production build
 - `npm run preview` - Preview the production build locally
 - `npm run lint` - Run ESLint
-- `npm run deploy` - Build and publish to GitHub Pages
-
-## Deploy to GitHub Pages
-
-1. Create a GitHub repository and push this project to the `main` branch.
-2. Verify the Vite base path in `vite.config.js` matches your repository name:
-
-- `base: '/issue-radar/'`
-
-3. Install dependencies:
-
-```bash
-npm install
-```
-
-4. Deploy:
-
-```bash
-npm run deploy
-```
-
-5. In GitHub: **Settings -> Pages**
-
-- Source: `Deploy from a branch`
-- Branch: `gh-pages`
-- Folder: `/ (root)`
-
-Your site is live at:
-
-`https://headinclouds.github.io/issue-radar/`
 
 ## Project Structure
 
