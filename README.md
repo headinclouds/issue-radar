@@ -73,9 +73,9 @@ npm run deploy
 - Branch: `gh-pages`
 - Folder: `/ (root)`
 
-Your site will be available at:
+Your site is live at:
 
-`https://YOUR_USERNAME.github.io/issue-radar/`
+`https://headinclouds.github.io/issue-radar/`
 
 ## Project Structure
 
